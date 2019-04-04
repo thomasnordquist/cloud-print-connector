@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/google/cloud-print-connector/fcm"
+	"github.com/urfave/cli"
 	"github.com/google/cloud-print-connector/gcp"
 	"github.com/google/cloud-print-connector/lib"
 	"github.com/google/cloud-print-connector/log"
@@ -22,7 +23,6 @@ import (
 	"github.com/google/cloud-print-connector/notification"
 	"github.com/google/cloud-print-connector/winspool"
 	"github.com/google/cloud-print-connector/xmpp"
-	"github.com/urfave/cli"
 	"golang.org/x/sys/windows/svc"
 	"golang.org/x/sys/windows/svc/debug"
 )
@@ -175,8 +175,7 @@ func (service *service) Execute(args []string, r <-chan svc.ChangeRequest, s cha
 		return false, 1
 	}
 	pm, err := manager.NewPrinterManager(ws, g, nil, nativePrinterPollInterval,
-		config.NativeJobQueueSize, *config.CUPSJobFullUsername, config.ShareScope, jobs, notifications,
-		config.FcmNotificationsEnable)
+		config.NativeJobQueueSize, *config.CUPSJobFullUsername, config.ShareScope, jobs, xmppNotifications)
 	if err != nil {
 		log.Fatal(err)
 		return false, 1
