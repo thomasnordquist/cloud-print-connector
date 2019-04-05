@@ -111,13 +111,13 @@ func (service *service) Execute(args []string, r <-chan svc.ChangeRequest, s cha
 
 	log.Info(lib.FullName)
 
-	if !config.CloudPrintingEnable && !config.LocalPrintingEnable {
-		log.Fatal("Cannot run connector with both local_printing_enable and cloud_printing_enable set to false")
-		return false, 1
-	} else if config.LocalPrintingEnable {
-		log.Fatal("Local printing has not been implemented in this version of the Windows connector.")
-		return false, 1
-	}
+	// if !config.CloudPrintingEnable && !config.LocalPrintingEnable {
+	//	log.Fatal("Cannot run connector with both local_printing_enable and cloud_printing_enable set to false")
+	//	return false, 1
+	// } else if config.LocalPrintingEnable {
+	//	log.Fatal("Local printing has not been implemented in this version of the Windows connector.")
+	//	return false, 1
+	// }
 
 	jobs := make(chan *lib.Job, 10)
 	notifications := make(chan notification.PrinterNotification, 5)
