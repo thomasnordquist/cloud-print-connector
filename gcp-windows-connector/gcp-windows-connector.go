@@ -22,6 +22,7 @@ import (
 	"github.com/google/cloud-print-connector/manager"
 	"github.com/google/cloud-print-connector/notification"
 	"github.com/google/cloud-print-connector/winspool"
+	"github.com/google/cloud-print-connector/privet"
 	"github.com/google/cloud-print-connector/xmpp"
 	"golang.org/x/sys/windows/svc"
 	"golang.org/x/sys/windows/svc/debug"
@@ -195,6 +196,20 @@ func (service *service) Execute(args []string, r <-chan svc.ChangeRequest, s cha
 		} else {
 			log.Info("Successfully registered for device notifications.")
 		}
+	}
+
+	var priv *privet.Privet
+	if config.LocalPrintingEnable {
+		if g == nil {
+			priv, err = privet.NewPrivet(jobs, config.LocalPortLow, config.LocalPortHigh, config.GCPBaseURL, nil)
+		} else {
+			priv, err = privet.NewPrivet(jobs, config.LocalPortLow, config.LocalPortHigh, config.GCPBaseURL, g.ProximityToken)
+		}
+		if err != nil {
+			log.Fatal(err)
+			return cli.NewExitError(err.Error(), 1)
+		}
+		defer priv.Quit()
 	}
 
 	if config.CloudPrintingEnable {
