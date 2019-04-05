@@ -175,7 +175,8 @@ func (service *service) Execute(args []string, r <-chan svc.ChangeRequest, s cha
 		return false, 1
 	}
 	pm, err := manager.NewPrinterManager(ws, g, nil, nativePrinterPollInterval,
-		config.NativeJobQueueSize, *config.CUPSJobFullUsername, config.ShareScope, jobs, xmppNotifications)
+		config.NativeJobQueueSize, *config.CUPSJobFullUsername, config.ShareScope, jobs, notifications,
+		config.FcmNotificationsEnable)
 	if err != nil {
 		log.Fatal(err)
 		return false, 1
